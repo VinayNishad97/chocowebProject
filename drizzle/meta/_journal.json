@@ -15,6 +15,20 @@
       "when": 1781347877947,
       "tag": "0001_regular_nightcrawler",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781356038991,
+      "tag": "0002_harsh_sandman",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781356175877,
+      "tag": "0003_burly_moonstone",
+      "breakpoints": true
     }
   ]
 }

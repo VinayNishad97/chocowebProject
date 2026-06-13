@@ -6,8 +6,8 @@ import {
     text,
     timestamp,
     varchar,
+    index,
 } from "drizzle-orm/pg-core";
-
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
     fname: varchar("fname", { length: 100 }).notNull(),
@@ -30,3 +30,20 @@ export const products = pgTable("products", {
     updatedAt: timestamp("updatedAt").default(sql`CURRENT_TIMESTAMP`),
     createdAt: timestamp("createdAt").default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const warehouses = pgTable(
+    "warehouses",
+    {
+        id: serial("id").primaryKey(),
+        name: varchar("name", { length: 100 }).notNull(),
+        pincode: varchar("pincod", { length: 6 }).notNull(),
+        updatedAt: timestamp("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+        createdAt: timestamp("createdAt").default(sql`CURRENT_TIMESTAMP`),
+    },
+
+    (table) => {
+        return {
+            pincodeIdx: index("pincode_Idx").on(table.pincode),
+        };
+    },
+);
