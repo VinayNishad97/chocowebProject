@@ -1,12 +1,14 @@
 "use client";
-
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "./data-table";
 import { columns } from "./column";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "../../http/api";
 import { Product } from "@/src/types";
+
 import ProductSheet from "./products-sheet";
+import SkeletonTable from "@/src/skeletons/products-skeliton";
 import { useNewProduct } from "@/src/store/products/product-store";
 export default function Products() {
     const { onOpen } = useNewProduct();
@@ -24,8 +26,9 @@ export default function Products() {
                 </Button>
                 <ProductSheet />
             </div>
-
-            <DataTable columns={columns} data={products ?? []} />
+            <Suspense fallback={<SkeletonTable />}>
+                <DataTable columns={columns} data={products ?? []} />
+            </Suspense>
         </>
     );
 }

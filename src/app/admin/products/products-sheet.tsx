@@ -13,13 +13,13 @@ import { useNewProduct } from "@/src/store/products/product-store";
 export default function ProductSheet() {
     const { isOpen, onClose } = useNewProduct();
     const queryclient = useQueryClient();
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationKey: ["create-product"],
         mutationFn: (data: FormData) => createproduct(data),
         onSuccess: () => {
             queryclient.invalidateQueries({ queryKey: ["products"] });
+            onClose();
             toast("Product Uploaded SuccesFully");
-            alert("success");
         },
     });
 
@@ -50,7 +50,7 @@ export default function ProductSheet() {
                             Create a new Product
                         </SheetDescription>
                     </SheetHeader>
-                    <ProductForm onSubmit={onSubmit} />
+                    <ProductForm onSubmit={onSubmit} isdisable={isPending} />
                 </SheetContent>
             </Sheet>
         </>

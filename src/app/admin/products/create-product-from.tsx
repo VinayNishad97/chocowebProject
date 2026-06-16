@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { productSchema } from "@/src/lib/validators/productSchema";
 import z from "zod";
 import { Input } from "@/components/ui/input";
-
+import { Loader2 } from "lucide-react";
 import {
     Card,
     CardContent,
@@ -32,8 +32,10 @@ export type FormValue = z.input<typeof productSchema>;
 
 export default function ProductForm({
     onSubmit,
+    isdisable,
 }: {
     onSubmit: (formValues: FormValue) => void;
+    isdisable: boolean;
 }) {
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
@@ -182,7 +184,11 @@ export default function ProductForm({
                         Reset
                     </Button>
                     <Button type="submit" form="form-rhf-demo">
-                        Create
+                        {isdisable ? (
+                            <Loader2 className="size-4 animate-spin" />
+                        ) : (
+                            "Create"
+                        )}
                     </Button>
                 </Field>
             </CardFooter>

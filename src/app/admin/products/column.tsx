@@ -17,9 +17,14 @@ export const columns: ColumnDef<Product>[] = [
         header: "Name",
     },
     {
+        accessorKey: "image",
+        header: "Image",
+    },
+    {
         accessorKey: "price",
         header: "Price",
     },
+
     {
         id: "actions",
         accessorKey: "name",
