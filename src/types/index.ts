@@ -19,3 +19,9 @@ export interface DeliveryPerson {
     phone: string;
     warehouse: string;
 }
+
+export interface Inventories {
+    sku: string;
+    warehouseId: number;
+    productid: number;
+}

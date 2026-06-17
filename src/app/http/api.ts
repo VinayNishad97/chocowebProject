@@ -1,7 +1,7 @@
-import { DeliveryPerson, Product } from "@/src/types";
+import { DeliveryPerson, Inventories, Product } from "@/src/types";
 import { api } from "./client";
 import { Warehouse } from "@/src/types";
-import { FormValue } from "../admin/delivery-person/create-warehouse-form";
+import { FormValue } from "../admin/warehouse/_components/create-warehouse-form";
 
 export const getAllProducts = async (): Promise<Product[]> => {
     const response = await api.get<Product[]>("/products");
@@ -40,5 +40,10 @@ export const createDeliveryPerson = async (data: FormValue) => {
             "Content-Type": "application/json",
         },
     });
+    return response.data;
+};
+
+export const getAllInventories = async (): Promise<Inventories[]> => {
+    const response = await api.get<Inventories[]>("/inventories");
     return response.data;
 };

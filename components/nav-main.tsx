@@ -57,7 +57,7 @@ export function NavMain() {
                 </Link>
 
                 <Link
-                    href={"/admin/analytics"}
+                    href={"/admin/inventorie"}
                     className="flex gap-2 align-middle rounded-[5px] text-1xl bg-gray-50 text-black  w-100 p-2 hover:bg-gray-200 cursor-pointer"
                 >
                     <LineChart className=" sm:size-6" />
