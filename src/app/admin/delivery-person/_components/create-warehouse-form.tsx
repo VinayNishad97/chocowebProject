@@ -32,7 +32,7 @@ import { Button } from "@/components/ui/button";
 import { deliveryPersonSchema } from "@/src/lib/validators/deliveryPersonSchema";
 import { useQuery } from "@tanstack/react-query";
 import { Warehouse } from "@/src/types";
-import { getAllwarehouses } from "../../http/api";
+import { getAllwarehouses } from "@/src/app/http/api";
 
 export type FormValue = z.input<typeof deliveryPersonSchema>;
 

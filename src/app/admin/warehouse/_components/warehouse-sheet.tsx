@@ -7,37 +7,38 @@ import {
 } from "@/components/ui/sheet";
 import ProductForm, { FormValue } from "./create-warehouse-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDeliveryPerson } from "../../http/api";
+import { createWarehouse } from "../../../http/api";
 import { useNewProduct } from "@/src/store/products/product-store";
 import { toast } from "sonner";
 export default function ProductSheet() {
     const { isOpen, onClose } = useNewProduct();
     const queryclient = useQueryClient();
     const { mutate, isPending } = useMutation({
-        mutationKey: ["create-deliveryperson"],
-        mutationFn: (data: FormValue) => createDeliveryPerson(data),
+        mutationKey: ["create-warehouse"],
+        mutationFn: (data: FormData) => createWarehouse(data),
         onSuccess: () => {
-            queryclient.invalidateQueries({ queryKey: ["deliveryperson"] });
+            queryclient.invalidateQueries({ queryKey: ["warehouses"] });
             onClose();
 
-            toast("Delivery Person Uploaded SuccesFully", {
-                position: "top-center",
-            });
+            toast("Warehouse Uploaded SuccesFully", { position: "top-center" });
         },
     });
 
     const onSubmit = (value: FormValue) => {
-        mutate(value);
+        const formdata = new FormData();
+        formdata.append("name", value.name);
+
+        formdata.append("pincode", String(value.pincode));
+
+        mutate(formdata);
     };
     return (
         <>
             <Sheet open={isOpen} onOpenChange={onClose}>
                 <SheetContent>
                     <SheetHeader>
-                        <SheetTitle>Add Delivery Person</SheetTitle>
-                        <SheetDescription>
-                            Add a new Delivery Person
-                        </SheetDescription>
+                        <SheetTitle>Add Warehouse</SheetTitle>
+                        <SheetDescription>Add a new Warehouse</SheetDescription>
                     </SheetHeader>
                     <ProductForm onSubmit={onSubmit} isdisable={isPending} />
                 </SheetContent>

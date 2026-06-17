@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { DataTable } from "./data-table";
-import { columns } from "./column";
+import { DataTable } from "./_components/data-table";
+import { columns } from "./_components/column";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "../../http/api";
 import { Product } from "@/src/types";
 
-import ProductSheet from "./products-sheet";
+import ProductSheet from "./_components/products-sheet";
 import SkeletonTable from "@/src/skeletons/products-skeliton";
 import { useNewProduct } from "@/src/store/products/product-store";
 export default function Products() {
