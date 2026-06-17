@@ -1,8 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Breadcrumb, BreadcrumbList } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-
+import { Toaster } from "@/components/ui/sonner";
 import {
     SidebarInset,
     SidebarProvider,
@@ -25,6 +23,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
                         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
                             {children}
                         </div>
+                        <Toaster />
                     </SidebarInset>
                 </SidebarProvider>
             </TooltipProvider>

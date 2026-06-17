@@ -5,11 +5,11 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
-import { toast } from "react-toastify";
 import ProductForm, { FormValue } from "./create-product-from";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createproduct } from "../../http/api";
 import { useNewProduct } from "@/src/store/products/product-store";
+import { toast } from "sonner";
 export default function ProductSheet() {
     const { isOpen, onClose } = useNewProduct();
     const queryclient = useQueryClient();
@@ -19,7 +19,8 @@ export default function ProductSheet() {
         onSuccess: () => {
             queryclient.invalidateQueries({ queryKey: ["products"] });
             onClose();
-            toast("Product Uploaded SuccesFully");
+
+            toast("Product Uploaded SuccesFully", { position: "top-center" });
         },
     });
 
