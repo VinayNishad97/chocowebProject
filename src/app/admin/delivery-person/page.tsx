@@ -4,29 +4,29 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "./data-table";
 import { columns } from "./column";
 import { useQuery } from "@tanstack/react-query";
-import { getAllProducts } from "../../http/api";
-import { Product } from "@/src/types";
+import { getAlldeliveryPerson } from "../../http/api";
+import { DeliveryPerson } from "@/src/types";
 
-import ProductSheet from "./products-sheet";
+import ProductSheet from "./delivery-person-sheet";
 import SkeletonTable from "@/src/skeletons/products-skeliton";
 import { useNewProduct } from "@/src/store/products/product-store";
 export default function Products() {
     const { onOpen } = useNewProduct();
     const {
-        data: products,
+        data: DeliveryPerson,
         isLoading,
         isError,
-    } = useQuery<Product[]>({
-        queryKey: ["products"],
-        queryFn: getAllProducts,
+    } = useQuery<DeliveryPerson[]>({
+        queryKey: ["deliveryperson"],
+        queryFn: getAlldeliveryPerson,
     });
 
     return (
         <>
             <div className="flex justify-between items-center">
-                <h1>Products</h1>
+                <h1>Delivery-Person</h1>
                 <Button size={"sm"} onClick={onOpen}>
-                    Add Product
+                    Add Delivery-Person
                 </Button>
                 <ProductSheet />
             </div>
@@ -38,7 +38,7 @@ export default function Products() {
                     <SkeletonTable />
                 </div>
             ) : (
-                <DataTable columns={columns} data={products ?? []} />
+                <DataTable columns={columns} data={DeliveryPerson ?? []} />
             )}
         </>
     );

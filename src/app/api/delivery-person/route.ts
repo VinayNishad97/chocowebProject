@@ -5,6 +5,7 @@ import { desc, eq } from "drizzle-orm";
 
 export async function POST(reqest: Request) {
     const reqData = await reqest.json();
+
     let validatedData;
     try {
         validatedData = await deliveryPersonSchema.parse(reqData);

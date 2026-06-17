@@ -6,6 +6,7 @@ import {
     BoxIcon,
     Contact,
     LineChart,
+    WarehouseIcon,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -26,14 +27,6 @@ export function NavMain() {
                     <HomeIcon className=" sm:size-6" />
                     DashBoard
                 </Link>
-
-                <Link
-                    href={"/admin/orders"}
-                    className="flex gap-2 align-middle rounded-[5px] text-1xl bg-gray-50 text-black  w-100 p-2 hover:bg-gray-200 cursor-pointer "
-                >
-                    <ShoppingCartIcon className=" sm:size-6" />
-                    Orders
-                </Link>
                 <Link
                     href={"/admin/products"}
                     className="flex gap-2 align-middle rounded-[5px] text-1xl bg-gray-50 text-black  w-100  p-2 hover:bg-gray-200 cursor-pointer "
@@ -42,18 +35,33 @@ export function NavMain() {
                     Products
                 </Link>
                 <Link
-                    href={"/admin/customers"}
+                    href={"/admin/warehouse"}
+                    className="flex gap-2 align-middle rounded-[5px] text-1xl bg-gray-50 text-black  w-100 p-2 hover:bg-gray-200 cursor-pointer "
+                >
+                    <WarehouseIcon />
+                    WareHouses
+                </Link>
+                <Link
+                    href={"/admin/delivery-person"}
                     className="flex gap-2 align-middle rounded-[5px] text-1xl bg-gray-50 text-black  w-100 p-2 hover:bg-gray-200 cursor-pointer "
                 >
                     <Contact className=" sm:size-6" />
-                    Customers
+                    Deliver Persons
                 </Link>
+                <Link
+                    href={"/admin/orders"}
+                    className="flex gap-2 align-middle rounded-[5px] text-1xl bg-gray-50 text-black  w-100 p-2 hover:bg-gray-200 cursor-pointer "
+                >
+                    <ShoppingCartIcon className=" sm:size-6" />
+                    Orders
+                </Link>
+
                 <Link
                     href={"/admin/analytics"}
                     className="flex gap-2 align-middle rounded-[5px] text-1xl bg-gray-50 text-black  w-100 p-2 hover:bg-gray-200 cursor-pointer"
                 >
                     <LineChart className=" sm:size-6" />
-                    Analytics
+                    Inventories
                 </Link>
             </SidebarMenu>
         </SidebarGroup>

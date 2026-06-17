@@ -5,5 +5,7 @@ export const deliveryPersonSchema = z.object({
     phone: z
         .string({ message: "phone number should be string " })
         .length(13, "phone number should be 13 characters long"),
-    warehouseId: z.number({ message: "Ware house Id should be a number " }),
+    warehouseId: z.number({
+        message: "Ware house Id should be a number ",
+    }),
 });
