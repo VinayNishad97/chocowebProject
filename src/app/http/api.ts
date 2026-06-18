@@ -47,3 +47,8 @@ export const getAllInventories = async (): Promise<Inventories[]> => {
     const response = await api.get<Inventories[]>("/inventories");
     return response.data;
 };
+
+export const getSpecificProduct = async (id: any): Promise<Product> => {
+    const response = await api.get<Product>(`/products/${id}`);
+    return response.data;
+};

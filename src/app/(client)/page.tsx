@@ -5,14 +5,16 @@ import Footer from "./_components/footer";
 import About from "./_components/about";
 import NewsLetter from "./_components/newletter";
 import SpecialProducts from "./_components/specialproducts";
+import { Products } from "./_components/product";
 export default function Home() {
     return (
         <>
             <Offer />
             <Nav />
             <Hero />
-            <About />
             <SpecialProducts />
+            <Products />
+            <About />
             <NewsLetter />
             <Footer />
         </>
