@@ -47,10 +47,10 @@ export const columns: ColumnDef<Inventories>[] = [
                                 navigator.clipboard.writeText(row.id)
                             }
                         >
-                            Copy Delivery-Person ID
+                            Copy Produts ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>View DeliveryPerson</DropdownMenuItem>
+                        <DropdownMenuItem>View Products</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

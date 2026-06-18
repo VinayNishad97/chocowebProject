@@ -189,16 +189,22 @@ export default function ProductForm({
                     </FieldGroup>
                 </CardContent>
                 <CardFooter>
-                    <Button
-                        type="submit"
-                        className="w-full"
-                        disabled={isdisable}
-                    >
-                        {isdisable && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Submit Inventory
-                    </Button>
+                    <Field orientation="horizontal">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => form.reset()}
+                        >
+                            Reset
+                        </Button>
+                        <Button type="submit" form="form-rhf-demo">
+                            {isdisable ? (
+                                <Loader2 className="size-4 animate-spin" />
+                            ) : (
+                                "Create"
+                            )}
+                        </Button>
+                    </Field>
                 </CardFooter>
             </form>
         </Card>
