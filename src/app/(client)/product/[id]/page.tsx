@@ -6,10 +6,11 @@ import Nav from "../../_components/nav";
 import { useParams } from "next/navigation";
 import Offer from "../../_components/offers";
 import Image from "next/image";
+import RatingExample from "@/components/rating-basic";
 
 export default function Page() {
     const params = useParams();
-    // Ensure id is a string and handle potential string arrays safely
+
     const id = Array.isArray(params.id) ? params.id[0] : params.id;
 
     const {
@@ -17,9 +18,8 @@ export default function Page() {
         isLoading,
         error,
     } = useQuery({
-        // 1. Add id to cache key so it refetches when route changes
         queryKey: ["specproduct", id],
-        // 2. Only fetch if id exists to prevent undefined API calls
+
         queryFn: () => getSpecificProduct(id!),
         enabled: !!id,
     });
@@ -45,6 +45,18 @@ export default function Page() {
                                 priority
                             />
                         )}
+                    </div>
+                    <div>
+                        <h1 className="text-4xl text-amber-800">Brand</h1>
+                        <p className="text-2xl text-amber-500">
+                            {product?.name}
+                        </p>
+                        <div className="flex mt-3">
+                            <RatingExample />
+                        </div>
+                        <div className="mt-3">
+                            <p>{product?.description}</p>
+                        </div>
                     </div>
                 </div>
             </section>

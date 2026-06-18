@@ -1,4 +1,4 @@
-import { DeliveryPerson, Inventories, Product } from "@/src/types";
+import { DeliveryPerson, Inventories, Product, FullProduct } from "@/src/types";
 import { api } from "./client";
 import { Warehouse } from "@/src/types";
 import { FormValue } from "../admin/warehouse/_components/create-warehouse-form";
@@ -48,7 +48,7 @@ export const getAllInventories = async (): Promise<Inventories[]> => {
     return response.data;
 };
 
-export const getSpecificProduct = async (id: any): Promise<Product> => {
-    const response = await api.get<Product>(`/products/${id}`);
+export const getSpecificProduct = async (id: any): Promise<FullProduct> => {
+    const response = await api.get<FullProduct>(`/products/${id}`);
     return response.data;
 };
