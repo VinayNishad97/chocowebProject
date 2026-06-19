@@ -61,9 +61,10 @@ export default function Page() {
 
     const qty = form.watch("qty");
     const price = React.useMemo(() => {
-        if (product?.price) {
+        if (product?.price && qty >= 0) {
             return product.price * qty;
         }
+
         return 0;
     }, [qty, product]);
     return (
