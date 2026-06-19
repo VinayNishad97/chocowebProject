@@ -43,6 +43,13 @@
       "when": 1781410954185,
       "tag": "0005_right_secret_warriors",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781857414422,
+      "tag": "0006_shallow_micromacro",
+      "breakpoints": true
     }
   ]
 }
