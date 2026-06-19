@@ -3,7 +3,7 @@
 import { getSpecificProduct } from "@/src/app/http/api";
 import { useQuery } from "@tanstack/react-query";
 import Nav from "../../_components/nav";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Offer from "../../_components/offers";
 import Image from "next/image";
 import RatingExample from "@/components/rating-basic";
@@ -14,6 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { orderSchema } from "@/src/lib/validators/orderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import {
     Field,
     FieldError,
@@ -22,6 +23,9 @@ import {
 } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 type FormValue = z.infer<typeof orderSchema>;
 
@@ -29,7 +33,7 @@ export default function Page() {
     const params = useParams();
 
     const id = Array.isArray(params.id) ? params.id[0] : params.id;
-
+    const pathname = usePathname();
     const form = useForm<FormValue>({
         resolver: zodResolver(orderSchema),
         defaultValues: {
@@ -39,6 +43,7 @@ export default function Page() {
             productId: Number(id),
         },
     });
+    const { data: session } = useSession();
 
     function onsubmit(values: FormValue) {
         console.log("Submitted Values:", values);
@@ -54,6 +59,13 @@ export default function Page() {
         enabled: !!id,
     });
 
+    const qty = form.watch("qty");
+    const price = React.useMemo(() => {
+        if (product?.price) {
+            return product.price * qty;
+        }
+        return 0;
+    }, [qty, product]);
     return (
         <>
             <Offer />
@@ -114,6 +126,9 @@ export default function Page() {
                                 </p>
                                 <div className="flex mt-3">
                                     <RatingExample />
+                                    <span className="text-sm ml-2">
+                                        144 Reviews
+                                    </span>
                                 </div>
                                 <div className="mt-3">
                                     <p>{product?.description}</p>
@@ -162,13 +177,13 @@ export default function Page() {
                                                         fieldState.invalid
                                                     }
                                                 >
-                                                    <FieldLabel htmlFor="address-input">
+                                                    <FieldLabel htmlFor="pincode-input">
                                                         Pincode
                                                     </FieldLabel>
                                                     <Input
                                                         {...field}
                                                         type="string"
-                                                        id="form-rhf-demo-price"
+                                                        id="form-rhf-demo-pincode"
                                                         aria-invalid={
                                                             fieldState.invalid
                                                         }
@@ -195,13 +210,13 @@ export default function Page() {
                                                         fieldState.invalid
                                                     }
                                                 >
-                                                    <FieldLabel htmlFor="address-input">
+                                                    <FieldLabel htmlFor="qty-input">
                                                         Quantity
                                                     </FieldLabel>
                                                     <Input
                                                         {...field}
                                                         type="number"
-                                                        id="form-rhf-demo-price"
+                                                        id="form-rhf-demo-qty"
                                                         aria-invalid={
                                                             fieldState.invalid
                                                         }
@@ -220,13 +235,25 @@ export default function Page() {
                                             )}
                                         />
                                     </FieldGroup>
+                                    <Separator className="bg-amber-700 my-3" />
 
-                                    <button
-                                        type="submit"
-                                        className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-md"
-                                    >
-                                        Submit Order
-                                    </button>
+                                    <div className="flex justify-between items-center">
+                                        <p className="text-3xl">$ {price}</p>
+
+                                        {session ? (
+                                            <Button className="bg-amber-700 px-4 py-2 hover:bg-amber-500">
+                                                Submit Order
+                                            </Button>
+                                        ) : (
+                                            <Link
+                                                href={`/api/auth/signin?callbackUrl=${pathname}`}
+                                            >
+                                                <Button className="bg-amber-700 px-4 py-2 hover:bg-amber-500">
+                                                    Submit Order
+                                                </Button>
+                                            </Link>
+                                        )}
+                                    </div>
                                 </form>
                             </div>
                         )}
