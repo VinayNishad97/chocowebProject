@@ -7,11 +7,42 @@ import { useParams } from "next/navigation";
 import Offer from "../../_components/offers";
 import Image from "next/image";
 import RatingExample from "@/components/rating-basic";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Star } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
+import { orderSchema } from "@/src/lib/validators/orderSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from "@/components/ui/field";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+
+type FormValue = z.infer<typeof orderSchema>;
 
 export default function Page() {
     const params = useParams();
 
     const id = Array.isArray(params.id) ? params.id[0] : params.id;
+
+    const form = useForm<FormValue>({
+        resolver: zodResolver(orderSchema),
+        defaultValues: {
+            address: "",
+            pincode: "",
+            qty: 1,
+            productId: Number(id),
+        },
+    });
+
+    function onsubmit(values: FormValue) {
+        console.log("Submitted Values:", values);
+    }
 
     const {
         data: product,
@@ -19,7 +50,6 @@ export default function Page() {
         error,
     } = useQuery({
         queryKey: ["specproduct", id],
-
         queryFn: () => getSpecificProduct(id!),
         enabled: !!id,
     });
@@ -29,9 +59,11 @@ export default function Page() {
             <Offer />
             <Nav />
             <section className="relative bg-[#f5f5f5]">
-                <div className="z-50 mx-auto flex h-full max-w-6xl gap-x-10 px-5 py-14 md:py-20">
-                    <div>
-                        {isLoading && <p>Loading product...</p>}
+                <div className="flex flex-col md:flex-row md:z-50 mx-auto h-full max-w-6xl gap-y-10 md:gap-x-10 px-5 py-14 md:py-20">
+                    <div className="flex-1">
+                        {isLoading && (
+                            <Skeleton className="aspect-square w-[28rem] bg-amber-200" />
+                        )}
                         {error && <p>Failed to load product.</p>}
 
                         {product && (
@@ -41,22 +73,163 @@ export default function Page() {
                                 width={500}
                                 height={500}
                                 sizes="(max-width: 768px) 100vw, 448px"
-                                className="aspect-square w-[28rem] rounded-md object-cover shadow-2xl"
+                                className="aspect-square w-md rounded-md object-cover shadow-2xl"
                                 priority
                             />
                         )}
                     </div>
-                    <div>
-                        <h1 className="text-4xl text-amber-800">Brand</h1>
-                        <p className="text-2xl text-amber-500">
-                            {product?.name}
-                        </p>
-                        <div className="flex mt-3">
-                            <RatingExample />
-                        </div>
-                        <div className="mt-3">
-                            <p>{product?.description}</p>
-                        </div>
+
+                    <div className="flex-1">
+                        {isLoading ? (
+                            <div className="flex flex-col gap-y-2">
+                                <Skeleton className="h-4 w-16 bg-amber-200" />
+                                <Skeleton className="h-10 w-2/3 bg-amber-200" />
+                                <div className="flex items-center gap-x-3">
+                                    <div className="flex items-center gap-x-0.5">
+                                        {[...Array(4)].map((_, i) => (
+                                            <Star
+                                                key={i}
+                                                className="size-4 text-yellow-400"
+                                                fill="#facc15"
+                                            />
+                                        ))}
+                                        <Star className="size-4 text-yellow-400" />
+                                    </div>
+                                    <span className="text-sm">144 Reviews</span>
+                                </div>
+                                <Skeleton className="mt-2 h-28 w-full bg-amber-200" />
+                                <Separator className="my-6 bg-amber-200" />
+                                <div className="flex items-center justify-between">
+                                    <Skeleton className="h-10 w-28 bg-amber-200" />
+                                    <Skeleton className="h-10 w-60 bg-amber-200" />
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                <h1 className="text-2xl text-amber-800">
+                                    Brand
+                                </h1>
+                                <p className="text-4xl text-amber-500">
+                                    {product?.name}
+                                </p>
+                                <div className="flex mt-3">
+                                    <RatingExample />
+                                </div>
+                                <div className="mt-3">
+                                    <p>{product?.description}</p>
+                                </div>
+
+                                <form
+                                    onSubmit={form.handleSubmit(onsubmit)}
+                                    className="mt-4"
+                                >
+                                    <FieldGroup>
+                                        <Controller
+                                            name="address"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field
+                                                    data-invalid={
+                                                        fieldState.invalid
+                                                    }
+                                                >
+                                                    <FieldLabel htmlFor="address-input">
+                                                        Address
+                                                    </FieldLabel>
+                                                    <Textarea
+                                                        id="address-input"
+                                                        className="border-amber-500 bg-white placeholder:text-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 focus-visible:ring-offset-0"
+                                                        placeholder="e.g Open Street 505"
+                                                        {...field}
+                                                    />
+
+                                                    {fieldState.invalid && (
+                                                        <FieldError
+                                                            errors={[
+                                                                fieldState.error,
+                                                            ]}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            )}
+                                        />
+                                        <Controller
+                                            name="pincode"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field
+                                                    data-invalid={
+                                                        fieldState.invalid
+                                                    }
+                                                >
+                                                    <FieldLabel htmlFor="address-input">
+                                                        Pincode
+                                                    </FieldLabel>
+                                                    <Input
+                                                        {...field}
+                                                        type="string"
+                                                        id="form-rhf-demo-price"
+                                                        aria-invalid={
+                                                            fieldState.invalid
+                                                        }
+                                                        placeholder="Enter The Pincode"
+                                                        autoComplete="off"
+                                                        className="border-amber-500 bg-white placeholder:text-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 focus-visible:ring-offset-0"
+                                                    />
+                                                    {fieldState.invalid && (
+                                                        <FieldError
+                                                            errors={[
+                                                                fieldState.error,
+                                                            ]}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            )}
+                                        />
+                                        <Controller
+                                            name="qty"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field
+                                                    data-invalid={
+                                                        fieldState.invalid
+                                                    }
+                                                >
+                                                    <FieldLabel htmlFor="address-input">
+                                                        Quantity
+                                                    </FieldLabel>
+                                                    <Input
+                                                        {...field}
+                                                        type="number"
+                                                        id="form-rhf-demo-price"
+                                                        aria-invalid={
+                                                            fieldState.invalid
+                                                        }
+                                                        placeholder="Enter The Quantity"
+                                                        autoComplete="off"
+                                                        className="border-amber-500 bg-white placeholder:text-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 focus-visible:ring-offset-0"
+                                                    />
+                                                    {fieldState.invalid && (
+                                                        <FieldError
+                                                            errors={[
+                                                                fieldState.error,
+                                                            ]}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            )}
+                                        />
+                                    </FieldGroup>
+
+                                    <button
+                                        type="submit"
+                                        className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-md"
+                                    >
+                                        Submit Order
+                                    </button>
+                                </form>
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>

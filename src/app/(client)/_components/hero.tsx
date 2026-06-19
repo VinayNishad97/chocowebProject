@@ -21,7 +21,7 @@ export default function Hero() {
                     Convenience and indulgence all in one package.
                 </p>
 
-                <Button className="w-fit px-8 py-6 text-base bg-white text-black hover:bg-neutral-200 transition-colors">
+                <Button className="w-fit px-8 py-6 text-base bg-white text-black hover:bg-amber-700 transition-colors">
                     Shop Now
                 </Button>
             </div>
