@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     }
 
     let transactionError: string = "";
-    let finalorder;
+    let finalorder: any = null;
     try {
         finalorder = await db.transaction(async (tx) => {
             const order = await tx
@@ -136,4 +136,6 @@ export async function POST(request: Request) {
             { status: 500 },
         );
     }
+
+    // create invoices
 }
