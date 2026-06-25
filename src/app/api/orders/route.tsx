@@ -8,8 +8,9 @@ import {
     warehouses,
 } from "@/src/lib/db/schema";
 import { orderSchema } from "@/src/lib/validators/orderSchema";
-import { and, eq, inArray, isNull } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 import { getServerSession } from "next-auth";
+import { exportTraceState } from "next/dist/trace";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -198,5 +199,15 @@ export async function POST(request: Request) {
             },
             { status: 500 },
         );
+    }
+}
+
+export async function GET() {
+    try {
+        const data = await db.select().from(orders).orderBy(desc(orders.id));
+
+        return Response.json(data, { status: 201 });
+    } catch (error) {
+        return Response.json(error, { status: 500 });
     }
 }

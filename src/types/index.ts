@@ -30,3 +30,14 @@ export interface Inventories {
     warehouseId: number;
     productid: number;
 }
+
+export interface Order {
+    id: number;
+    userId: number;
+    status: string;
+    type: string;
+    price: number;
+    address: string;
+    productsId: number;
+    qty: number;
+}
