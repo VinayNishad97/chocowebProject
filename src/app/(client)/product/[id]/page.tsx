@@ -1,7 +1,7 @@
 "use client";
 
 import { getSpecificProduct } from "@/src/app/http/api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Nav from "../../_components/nav";
 import { useParams, usePathname } from "next/navigation";
 import Offer from "../../_components/offers";
@@ -26,8 +26,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { CreateOrder } from "@/src/app/http/orders-api";
+import { toast } from "sonner";
 
-type FormValue = z.infer<typeof orderSchema>;
+export type FormValue = z.infer<typeof orderSchema>;
 
 export default function Page() {
     const params = useParams();
@@ -40,13 +42,21 @@ export default function Page() {
             address: "",
             pincode: "",
             qty: 1,
-            productId: Number(id),
+            productsId: Number(id),
         },
     });
     const { data: session } = useSession();
-
+    const { mutate } = useMutation({
+        mutationKey: ["create-order"],
+        mutationFn: (data: FormValue) => CreateOrder(data),
+        onSuccess: () => {
+            toast("Order Placed", {
+                position: "top-center",
+            });
+        },
+    });
     function onsubmit(values: FormValue) {
-        console.log("Submitted Values:", values);
+        mutate(values);
     }
 
     const {

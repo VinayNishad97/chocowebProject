@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const orderSchema = z.object({
-    productId: z.number({ message: "product Id should be a number" }),
+    productsId: z.number({ message: "product Id should be a number" }),
     pincode: z
         .string({ message: "pincode should be string " })
         .length(6, "pincode should be of leangth 6"),

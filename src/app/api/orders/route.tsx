@@ -10,78 +10,97 @@ import {
 import { orderSchema } from "@/src/lib/validators/orderSchema";
 import { and, eq, inArray, isNull } from "drizzle-orm";
 import { getServerSession } from "next-auth";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2026-06-24.dahlia",
+});
 
 export async function POST(request: Request) {
-    const session = getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
     if (!session) {
-        return Response.json({ massge: "Not authenticated" }, { status: 500 });
+        return Response.json({ message: "Not authenticated" }, { status: 501 });
     }
+
     const data = await request.json();
-    let velidatedData;
-
+    let validatedData;
     try {
-        velidatedData = await orderSchema.parse(data);
+        validatedData = await orderSchema.parse(data);
     } catch (error) {
-        return Response.json({ mssg: error }, { status: 400 });
+        return Response.json(
+            { message: "Validation error", error },
+            { status: 400 },
+        );
     }
-    // get warehouse
 
+    // Get warehouse
     const warehouseResult = await db
         .select({ id: warehouses.id })
         .from(warehouses)
-        .where(eq(warehouses.pincode, velidatedData.pincode));
+        .where(eq(warehouses.pincode, validatedData.pincode));
 
     if (!warehouseResult.length) {
-        return Response.json({ massge: "no werehouse found" }, { status: 401 });
+        return Response.json(
+            { message: "No warehouse found" },
+            { status: 404 },
+        );
     }
-    // get product
 
+    // Get product
     const foundProducts = await db
         .select()
         .from(products)
-        .where(eq(products.id, velidatedData.productId))
+        .where(eq(products.id, validatedData.productsId))
         .limit(1);
 
     if (!foundProducts.length) {
-        return Response.json({ massge: "no product found" }, { status: 401 });
+        return Response.json({ message: "No product found" }, { status: 404 });
     }
 
-    let transactionError: string = "";
-    let finalorder: any = null;
+    const product = foundProducts[0];
+    const totalPrice = product.price * validatedData.qty;
+
+    let transactionError = "";
+    let finalOrder: any = null;
+
     try {
-        finalorder = await db.transaction(async (tx) => {
+        finalOrder = await db.transaction(async (tx) => {
+            console.log("starting transaction");
+
             const order = await tx
                 .insert(orders)
-                // @ts-ignore
                 .values({
-                    ...velidatedData,
-                    // @ts-ignore
-                    userId: session.token.id,
-                    price: foundProducts[0].price * velidatedData.qty,
-                    status: "received",
+                    ...validatedData,
+                    userId: Number(session.user.id),
+                    price: totalPrice,
+                    status: "pending",
                 })
                 .returning({ id: orders.id, price: orders.price });
-            // check available stock
+
+            console.log("orders", order);
+
+            // Check available stock
             const availableStock = await tx
                 .select()
                 .from(inventories)
                 .where(
                     and(
                         eq(inventories.warehouseId, warehouseResult[0].id),
-                        eq(inventories.productId, velidatedData.productId),
+                        eq(inventories.productId, validatedData.productsId),
                         isNull(inventories.orderId),
                     ),
                 )
-                .limit(velidatedData.qty)
+                .limit(validatedData.qty)
                 .for("update", { skipLocked: true });
 
-            if (availableStock.length < velidatedData.qty) {
-                transactionError = `Low on Stock , Only ${availableStock.length} Pieces left`;
+            if (availableStock.length < validatedData.qty) {
+                transactionError = `Low on Stock, Only ${availableStock.length} Pieces left`;
                 tx.rollback();
                 return;
             }
 
+            // Find available delivery person
             const availablePerson = await tx
                 .select()
                 .from(deliveryPersons)
@@ -95,11 +114,13 @@ export async function POST(request: Request) {
                 .limit(1);
 
             if (!availablePerson.length) {
-                transactionError = `Delivery person is not available at the movment`;
+                transactionError =
+                    "Delivery person is not available at the moment";
                 tx.rollback();
                 return;
             }
 
+            // Reserve inventory
             await tx
                 .update(inventories)
                 .set({ orderId: order[0].id })
@@ -110,32 +131,72 @@ export async function POST(request: Request) {
                     ),
                 );
 
-            // update delivery person
             await tx
                 .update(deliveryPersons)
                 .set({ orderId: order[0].id })
                 .where(eq(deliveryPersons.id, availablePerson[0].id));
-
-            // update orders
 
             await tx
                 .update(orders)
                 .set({ status: "reserved" })
                 .where(eq(orders.id, order[0].id));
 
-            // transection commit
             return order[0];
         });
     } catch (error) {
+        if (transactionError) {
+            return Response.json(
+                { message: transactionError },
+                { status: 400 },
+            );
+        }
+
+        console.error("Database transaction system failure:", error);
         return Response.json(
-            {
-                massage: transactionError
-                    ? transactionError
-                    : "error while db transaction",
-            },
+            { message: "Database transaction failed" },
             { status: 500 },
         );
     }
 
-    // create invoices
+    if (!finalOrder || !finalOrder.id) {
+        return Response.json(
+            { message: transactionError || "Order processing failed safely" },
+            { status: 400 },
+        );
+    }
+
+    try {
+        const stripeSession = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            line_items: [
+                {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: product.name,
+                        },
+                        unit_amount: product.price * 100,
+                    },
+                    quantity: validatedData.qty,
+                },
+            ],
+            mode: "payment",
+            success_url: `${process.env.CLIENT_DOMAIN}`,
+            cancel_url: `${process.env.CLIENT_DOMAIN}/${finalOrder.id}`,
+            metadata: {
+                orderId: finalOrder.id.toString(),
+            },
+        });
+
+        return Response.json({ url: stripeSession.url }, { status: 200 });
+    } catch (stripeError) {
+        console.error("Stripe Session Failure:", stripeError);
+        return Response.json(
+            {
+                message: "Order reserved, but Stripe session creation failed",
+                error: String(stripeError),
+            },
+            { status: 500 },
+        );
+    }
 }
