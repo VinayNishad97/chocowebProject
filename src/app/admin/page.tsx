@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Cardd from "@/components/card";
 import { ChartAreaInteractive } from "@/components/areachart";
-
+export const dynamic = "force-dynamic";
 export default function AdminDashboard() {
     return (
         <>
