@@ -42,6 +42,10 @@ export const authOptions: AuthOptions = {
             },
         }),
     ],
+    secret: process.env.NEXTAUTH_SECRET,
+    session: {
+        strategy: "jwt",
+    },
     callbacks: {
         async session({ session, token }) {
             if (session.user) {
