@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sheet";
 import ProductForm, { FormValue } from "./create-warehouse-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDeliveryPerson } from "../../../http/api";
+import { createDeliveryPerson } from "@/src/app/http/deliveryperson-api";
 import { useNewProduct } from "@/src/store/products/product-store";
 import { toast } from "sonner";
 export default function ProductSheet() {

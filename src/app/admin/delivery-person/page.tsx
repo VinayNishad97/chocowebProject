@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/column";
 import { useQuery } from "@tanstack/react-query";
-import { getAlldeliveryPerson } from "../../http/api";
+import { getAlldeliveryPerson } from "../../http/deliveryperson-api";
 import { DeliveryPerson } from "@/src/types";
 
 import ProductSheet from "./_components/delivery-person-sheet";

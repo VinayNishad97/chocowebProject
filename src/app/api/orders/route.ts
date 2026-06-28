@@ -11,6 +11,7 @@ import { orderSchema } from "@/src/lib/validators/orderSchema";
 import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { exportTraceState } from "next/dist/trace";
+import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -168,7 +169,6 @@ export async function POST(request: Request) {
 
     try {
         const stripeSession = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
             line_items: [
                 {
                     price_data: {
@@ -182,7 +182,7 @@ export async function POST(request: Request) {
                 },
             ],
             mode: "payment",
-            success_url: `${process.env.CLIENT_DOMAIN}`,
+            success_url: `${process.env.CLIENT_DOMAIN}/success`,
             cancel_url: `${process.env.CLIENT_DOMAIN}/${finalOrder.id}`,
             metadata: {
                 orderId: finalOrder.id.toString(),
