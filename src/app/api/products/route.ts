@@ -19,10 +19,11 @@ export async function POST(request: Request) {
     } catch (error) {
         return Response.json({ massge: error }, { status: 400 });
     }
-
+    //@ts-ignore
     const filename = `${Date.now()}.${validatedData.image.name.split(".").slice(-1)}`;
 
     try {
+        //@ts-ignore
         const buffer = Buffer.from(await validatedData.image.arrayBuffer());
         await writeFile(
             path.join(process.cwd(), "public/assets", filename),
