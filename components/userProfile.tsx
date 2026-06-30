@@ -18,6 +18,7 @@ export function CollapsibleBasic() {
     const pathname = usePathname();
     const name = session.data?.user.name;
     const email = session.data?.user.email;
+    const userRole = session.data?.user.role;
     const userimg = session.data?.user.image?.toString();
     return (
         <>
@@ -41,8 +42,12 @@ export function CollapsibleBasic() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem variant="default">
-                            <UserIcon />
+                            <p>@</p>
                             {email}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem variant="default">
+                            <UserIcon />
+                            {userRole}
                         </DropdownMenuItem>
 
                         <DropdownMenuSeparator />
