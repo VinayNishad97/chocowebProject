@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Hero() {
     return (
@@ -20,10 +21,11 @@ export default function Hero() {
                     favorite chocolate to your door, swiftly and reliably.
                     Convenience and indulgence all in one package.
                 </p>
-
-                <Button className="w-fit px-8 py-6 text-base bg-white text-black hover:bg-amber-700 transition-colors">
-                    Shop Now
-                </Button>
+                <Link href={"/products"}>
+                    <Button className="w-fit px-8 py-6 text-base bg-white text-black hover:bg-amber-700 transition-colors">
+                        Shop Now
+                    </Button>
+                </Link>
             </div>
         </section>
     );
