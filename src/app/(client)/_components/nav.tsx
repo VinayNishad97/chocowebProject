@@ -4,15 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { CollapsibleBasic } from "@/components/userProfile";
-
-const Links = [
-    { name: "Home", href: "/" },
-    { name: "Products", href: "/products" },
-    { name: "Offers", href: "/offers" },
-    { name: "Orders", href: "/orders" },
-];
-
-const AutherizedOnlyLinks = [{ name: "Admin", href: "/admin" }];
+import { Links, AutherizedOnlyLinks } from "@/src/constents";
 
 export default function Nav() {
     const [isOpen, setIsOpen] = useState(false);
