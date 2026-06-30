@@ -14,12 +14,12 @@ export default function About() {
                     <Separator className="w-20 bg-brown-900 h-0.5" />
                 </div>
                 <p className="text-center mt-10 w-10/12">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Culpa, veritatis vero dolorem accusantium ea voluptatum
-                    libero accusamus doloremque debitis, voluptatibus ad
-                    incidunt dolore, iste sunt. Cumque repellat est dignissimos.
-                    Voluptatem eaque veniam deserunt quo. Molestiae at maxime
-                    nobis rerum eligendi.
+                    HII, I am Vinay Nishad an I.T student in BMU(Bhagwan mahavir
+                    university). I am a full stack developer. This website is
+                    made up on Nextjs, Reactjs, TanStack(TanStack Query for
+                    fetching), Drizzle(for migrations),NextAuth(for
+                    Authentication), Supabase(for posgreSQL),ShadCN UI (for
+                    Complex UI)
                 </p>
                 <Button className="mt-10 bg-brown-900 hover:bg-brown-800 active:bg-brown-700 px-8">
                     Shop Now
