@@ -234,6 +234,16 @@ export default function Page() {
                                                         placeholder="Enter The Quantity"
                                                         autoComplete="off"
                                                         className="border-amber-500 bg-white placeholder:text-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 focus-visible:ring-offset-0"
+                                                        onChange={(e) => {
+                                                            const val =
+                                                                e.target
+                                                                    .valueAsNumber;
+                                                            field.onChange(
+                                                                isNaN(val)
+                                                                    ? ""
+                                                                    : val,
+                                                            );
+                                                        }}
                                                     />
                                                     {fieldState.invalid && (
                                                         <FieldError
