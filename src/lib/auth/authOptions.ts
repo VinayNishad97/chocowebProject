@@ -105,7 +105,7 @@ export const authOptions: AuthOptions = {
                         name: data.fname,
                         email: data.email,
                         image: data.image,
-                        role: dbUser.role || "user", // Fallback if role is empty
+                        role: dbUser.role || "user",
                     };
                 } catch (error) {
                     console.error(
@@ -124,12 +124,13 @@ export const authOptions: AuthOptions = {
             },
         }),
     ],
-    // 1. Explicitly enforce JWT storage mechanics
+
     session: {
         strategy: "jwt",
     },
-    // 2. Ensure your secret environment variable is bound directly into the config core
+
     secret: process.env.NEXTAUTH_SECRET,
+
     callbacks: {
         async jwt({ token, user }) {
             if (user) {

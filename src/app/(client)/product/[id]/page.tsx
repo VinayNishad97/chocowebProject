@@ -85,7 +85,7 @@ export default function Page() {
                 <div className="flex flex-col md:flex-row md:z-50 mx-auto h-full max-w-6xl gap-y-10 md:gap-x-10 px-5 py-14 md:py-20">
                     <div className="flex-1">
                         {isLoading && (
-                            <Skeleton className="aspect-square w-[28rem] bg-amber-200" />
+                            <Skeleton className="aspect-square w-md rounded-md object-cover shadow-2xl bg-amber-200" />
                         )}
                         {error && <p>Failed to load product.</p>}
 
