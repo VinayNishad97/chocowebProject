@@ -3,8 +3,8 @@ import Link from "next/link";
 const Links = [
     { name: "Home", href: "/" },
     {
-        name: "Best Selling",
-        href: "/bestselling",
+        name: "Products",
+        href: "/products",
     },
     {
         name: "Offers",

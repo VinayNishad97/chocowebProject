@@ -4,7 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { getAllProducts } from "../../http/api";
-export const Products = () => {
+import Offer from "../_components/offers";
+import Nav from "../_components/nav";
+export default function Products() {
     const { data: products } = useQuery({
         queryKey: ["products"],
         queryFn: getAllProducts,
@@ -12,6 +14,8 @@ export const Products = () => {
     });
     return (
         <>
+            <Offer />
+            <Nav />
             <section className="bg-[#f5f5f5] px-5 py-14 md:py-20">
                 <div className="mx-auto max-w-6xl">
                     <div className="flex items-center justify-center gap-5">
@@ -60,4 +64,4 @@ export const Products = () => {
             </section>
         </>
     );
-};
+}

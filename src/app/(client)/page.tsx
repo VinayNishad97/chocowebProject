@@ -5,7 +5,7 @@ import Footer from "./_components/footer";
 import About from "./_components/about";
 import NewsLetter from "./_components/newletter";
 import SpecialProducts from "./_components/specialproducts";
-import { Products } from "./_components/product";
+import BestSellingProducts from "./_components/bestsellings";
 export default function Home() {
     return (
         <>
@@ -13,7 +13,7 @@ export default function Home() {
             <Nav />
             <Hero />
             <SpecialProducts />
-            <Products />
+            <BestSellingProducts />
             <About />
             <NewsLetter />
             <Footer />
