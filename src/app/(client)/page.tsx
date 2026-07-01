@@ -6,6 +6,7 @@ import About from "./_components/about";
 import NewsLetter from "./_components/newletter";
 import SpecialProducts from "./_components/specialproducts";
 import BestSellingProducts from "./_components/bestsellings";
+
 export default function Home() {
     return (
         <>

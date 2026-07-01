@@ -28,6 +28,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { CreateOrder } from "@/src/app/http/orders-api";
 import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export type FormValue = z.infer<typeof orderSchema>;
 
@@ -49,8 +50,14 @@ export default function Page() {
     const { mutate } = useMutation({
         mutationKey: ["create-order"],
         mutationFn: (data: FormValue) => CreateOrder(data),
+
         onSuccess: () => {
             toast("Order Placed", {
+                position: "top-center",
+            });
+        },
+        onError: () => {
+            toast("Something went wrong", {
                 position: "top-center",
             });
         },
