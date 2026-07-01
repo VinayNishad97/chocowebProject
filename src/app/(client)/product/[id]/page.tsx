@@ -14,7 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { orderSchema } from "@/src/lib/validators/orderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Field,
     FieldError,
@@ -47,7 +47,7 @@ export default function Page() {
         },
     });
     const { data: session } = useSession();
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationKey: ["create-order"],
         mutationFn: (data: FormValue) => CreateOrder(data),
 
@@ -269,8 +269,13 @@ export default function Page() {
                                         <p className="text-3xl">$ {price}</p>
 
                                         {session ? (
-                                            <Button className="bg-amber-700 px-4 py-2 hover:bg-amber-500">
-                                                Submit Order
+                                            <Button
+                                                className="bg-amber-700 px-4 py-2 hover:bg-amber-500"
+                                                disabled={isPending}
+                                            >
+                                                {isPending
+                                                    ? "Processing.."
+                                                    : "Submit Order"}
                                             </Button>
                                         ) : (
                                             <Link
