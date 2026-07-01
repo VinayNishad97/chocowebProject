@@ -21,9 +21,12 @@ export default function About() {
                     Authentication), Supabase(for posgreSQL),ShadCN UI (for
                     Complex UI)
                 </p>
-                <Button className="mt-10 bg-brown-900 hover:bg-brown-800 active:bg-brown-700 px-8">
-                    Shop Now
-                </Button>
+                <div className="flex items-center gap-1">
+                    <label>Contect : </label>
+                    <h1 className="text-amber-600 text-1xl hover:text-amber-400 hover:cursor-pointer">
+                        vinay972591@gmail.com
+                    </h1>
+                </div>
             </div>
         </section>
     );

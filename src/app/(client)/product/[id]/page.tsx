@@ -28,7 +28,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { CreateOrder } from "@/src/app/http/orders-api";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
 
 export type FormValue = z.infer<typeof orderSchema>;
 
