@@ -10,7 +10,6 @@ import {
 import { orderSchema } from "@/src/lib/validators/orderSchema";
 import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { exportTraceState } from "next/dist/trace";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -189,8 +188,8 @@ export async function POST(request: Request) {
                 userId: session.user.id,
             },
         });
-
-        return Response.json({ url: stripeSession.url }, { status: 200 });
+        console.log(stripeSession.url);
+        return NextResponse.json({ url: stripeSession.url }, { status: 200 });
     } catch (stripeError) {
         console.error("Stripe Session Failure:", stripeError);
         return Response.json(

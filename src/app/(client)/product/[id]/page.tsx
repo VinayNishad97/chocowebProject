@@ -50,10 +50,18 @@ export default function Page() {
         mutationKey: ["create-order"],
         mutationFn: (data: FormValue) => CreateOrder(data),
 
-        onSuccess: () => {
-            toast("Order Placed", {
+        onSuccess: (data) => {
+            toast("Redirecting to Payment page..", {
                 position: "top-center",
             });
+            //@ts-ignore
+            if (data && data.url) {
+                //@ts-ignore
+                window.location.href = data.url;
+            } else {
+                console.error("No checkout URL received from API", data);
+                toast.error("Failed to retrieve checkout session");
+            }
         },
         onError: () => {
             toast("Something went wrong", {
