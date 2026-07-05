@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Success() {
     return (
         <>
-            <div className="flex flex-col  gap-10 items-center ">
+            <div className="flex flex-col h-screen w-screen  gap-10 items-center justify-center">
                 <div className="flex flex-col gap-2 items-center">
                     <h1 className="text-6xl text-amber-700">Thank You!!</h1>
                     <h1 className="text-4xl text-amber-400">
