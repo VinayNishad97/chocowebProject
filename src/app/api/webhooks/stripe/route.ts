@@ -14,7 +14,6 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 export async function POST(req: Request) {
     const body = await req.text();
     const signature = (await headers()).get("Stripe-Signature") as string;
-
     let event: Stripe.Event;
 
     try {
@@ -27,18 +26,50 @@ export async function POST(req: Request) {
         );
     }
 
+    let orderIdToUpdate: string | null = null;
+
     if (event.type === "checkout.session.completed") {
         const session = event.data.object as Stripe.Checkout.Session;
-        const orderId = session.metadata?.orderId;
+        orderIdToUpdate = session.metadata?.orderId || null;
 
-        if (orderId) {
-            console.log(`Payment confirmed for Order ID: ${orderId}`);
-
-            await db
-                .update(orders)
-                .set({ status: "paid" })
-                .where(eq(orders.id, Number(orderId)));
+        if (orderIdToUpdate) {
+            console.log(
+                `[Checkout Session] Found Order ID: ${orderIdToUpdate}`,
+            );
         }
+    }
+
+    if (event.type === "payment_intent.succeeded") {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const checkoutSessionId =
+            paymentIntent.payment_details?.order_reference;
+
+        if (checkoutSessionId) {
+            console.log(
+                `[Payment Intent] Fetching checkout session details for: ${checkoutSessionId}`,
+            );
+            try {
+                const session =
+                    await stripe.checkout.sessions.retrieve(checkoutSessionId);
+                orderIdToUpdate = session.metadata?.orderId || null;
+            } catch (error) {
+                console.error(
+                    "Failed to retrieve stripe checkout session:",
+                    error,
+                );
+            }
+        }
+    }
+
+    if (orderIdToUpdate) {
+        console.log(
+            `Updating database for Order ID: ${orderIdToUpdate} to 'paid'`,
+        );
+
+        await db
+            .update(orders)
+            .set({ status: "paid" })
+            .where(eq(orders.id, Number(orderIdToUpdate)));
     }
 
     return NextResponse.json({ received: true }, { status: 200 });
