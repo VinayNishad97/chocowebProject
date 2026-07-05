@@ -3,8 +3,8 @@ import { Order } from "@/src/types";
 
 export const columns: ColumnDef<Order>[] = [
     {
-        accessorKey: "id",
-        header: "ID",
+        accessorKey: "productsId",
+        header: "ProductId",
     },
     {
         accessorKey: "price",

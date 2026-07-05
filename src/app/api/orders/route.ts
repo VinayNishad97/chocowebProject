@@ -186,6 +186,7 @@ export async function POST(request: Request) {
             cancel_url: `${process.env.CLIENT_DOMAIN}/${finalOrder.id}`,
             metadata: {
                 orderId: finalOrder.id.toString(),
+                userId: session.user.id,
             },
         });
 

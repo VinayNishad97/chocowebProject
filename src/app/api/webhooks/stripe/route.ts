@@ -12,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
-    const body = await req.text(); // Stripe requires the raw body string
+    const body = await req.text();
     const signature = (await headers()).get("Stripe-Signature") as string;
 
     let event: Stripe.Event;
@@ -27,7 +27,6 @@ export async function POST(req: Request) {
         );
     }
 
-    // Handle successful checkout completion events
     if (event.type === "checkout.session.completed") {
         const session = event.data.object as Stripe.Checkout.Session;
         const orderId = session.metadata?.orderId;
@@ -35,10 +34,9 @@ export async function POST(req: Request) {
         if (orderId) {
             console.log(`Payment confirmed for Order ID: ${orderId}`);
 
-            // Update your database to mark the order as paid or processing
             await db
                 .update(orders)
-                .set({ status: "paid" }) // adjusting value to match your allowed status strings
+                .set({ status: "paid" })
                 .where(eq(orders.id, Number(orderId)));
         }
     }

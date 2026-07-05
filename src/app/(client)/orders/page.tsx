@@ -11,6 +11,7 @@ import SkeletonTable from "@/src/skeletons/products-skeliton";
 import { GetOrders } from "../../http/orders-api";
 import { DataTable } from "./_components/data-table";
 import { useSession } from "next-auth/react";
+import { getSpecificProduct } from "../../http/api";
 
 export default function Orders() {
     const session = useSession();
@@ -25,6 +26,7 @@ export default function Orders() {
         queryKey: ["order"],
         queryFn: GetOrders,
     });
+
     order?.map((o) => (o.userId == userId ? filtredOrder.push(o) : undefined));
 
     return (
