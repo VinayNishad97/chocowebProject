@@ -12,3 +12,9 @@ export const GetOrders = async (): Promise<Order[]> => {
 
     return response.data;
 };
+
+export const GetPaidOrders = async (): Promise<Order[]> => {
+    const response = await api.get<Order[]>("/paidorders");
+
+    return response.data;
+};
