@@ -40,6 +40,10 @@ export default function AdminDashboard() {
         Totalprice = [];
     }
     let finalprice = 0;
+    if (Totalprice.length === 1) {
+        finalprice = Totalprice[0];
+    }
+
     if (Totalprice?.length > 1) {
         for (let i = 0; i < Totalprice?.length; i++) {
             finalprice += Totalprice[i];
