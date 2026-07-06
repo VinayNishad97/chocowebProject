@@ -22,4 +22,4 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
                            ### Order Process ###
 
-![System Architecture Diagram](public/diagrams/choco-order-process.png)
+![System Architecture Diagram](public/diagrams/choco-order-process2.png)
